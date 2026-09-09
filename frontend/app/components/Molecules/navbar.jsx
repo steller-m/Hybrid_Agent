@@ -4,7 +4,7 @@ import { CgProfile } from "react-icons/cg";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FaBars, FaTimes } from 'react-icons/fa';
-import { FiLogIn, FiUserPlus, FiLogOut, FiHome, FiInfo, FiMail, FiList, FiStar, FiAward, FiPieChart } from 'react-icons/fi';
+import { FiLogIn, FiUserPlus, FiLogOut, FiHome, FiInfo, FiMail, FiList, FiStar, FiAward, FiPieChart, FiPlayCircle } from 'react-icons/fi';
 import Setting from './Setting';
 import NotificationBell from './NotificationBell';
 import { useTheme } from '../Atoms/ThemeProvider';
@@ -13,6 +13,7 @@ import { useNotifications } from '../Atoms/NotificationProvider';
 
 const navLinks = [
   { href: "/", label: "Home", icon: FiHome },
+  { href: "/Demo", label: "Demo", icon: FiPlayCircle },
   { href: "/LearnMore", label: "About", icon: FiInfo },
   { href: "/Contact", label: "Contact", icon: FiMail },
   { href: "/Listings", label: "Listings", icon: FiList },

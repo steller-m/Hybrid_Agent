@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import {
   FiHome, FiTruck, FiDollarSign, FiShield, FiUser, FiArrowRight,
@@ -180,26 +180,35 @@ const DemoPage = () => {
   const [step, setStep] = useState(0);
   const [simulating, setSimulating] = useState(false);
   const [autoPlay, setAutoPlay] = useState(false);
+  const advanceTimer = useRef(null);
 
   const isAgentBrokered = listing.listing_type === 'agent_brokered';
   const steps = isAgentBrokered ? AGENT_BROKERED_STEPS : OWNER_DIRECT_STEPS;
   const split = computeSplit(listing.price_usdc, listing.commission_bps, PLATFORM_FEE_BPS);
 
   const reset = useCallback(() => {
+    if (advanceTimer.current) {
+      clearTimeout(advanceTimer.current);
+      advanceTimer.current = null;
+    }
     setStep(0);
     setSimulating(false);
     setAutoPlay(false);
   }, []);
 
   const nextStep = useCallback(() => {
-    if (step < steps.length - 1) {
-      setSimulating(true);
-      setTimeout(() => {
-        setStep((s) => s + 1);
-        setSimulating(false);
-      }, 800);
-    }
+    if (advanceTimer.current || step >= steps.length - 1) return;
+    setSimulating(true);
+    advanceTimer.current = setTimeout(() => {
+      advanceTimer.current = null;
+      setSimulating(false);
+      setStep((s) => (s < steps.length - 1 ? s + 1 : s));
+    }, 800);
   }, [step, steps.length]);
+
+  useEffect(() => () => {
+    if (advanceTimer.current) clearTimeout(advanceTimer.current);
+  }, []);
 
   const prevStep = useCallback(() => {
     if (step > 0) setStep((s) => s - 1);
